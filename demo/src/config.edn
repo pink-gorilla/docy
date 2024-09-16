@@ -27,8 +27,21 @@
               {:kb "ctrl-shift-enter" :handler [:notebook/evaluate-all]         :desc "Evaluate all segments"}
               {:kb "ctrl-enter" :handler [:repl/eval-expression]               :desc "Evaluate the highlighted segment"}]
 
-:docy [; external 
-       tablecloth.api
-       ]
-
+:docy {:namespaces [; external 
+                    tablecloth.api]
+       :snippets
+         [{:ns "demo.notebook.movies"
+           :kernel :clj
+           :label "print table (simple)"
+           :fns ["tablecloth.api/aggregate"
+                 "tablecloth.api/columns"]}
+          {:ns "demo.notebook.simple"
+           :kernel :clj
+           :label "range"
+           :fns ["tablecloth.api/aggregate"
+                 "tablecloth.api/columns"
+                 "tablecloth.api/concat"]
+           }]}
+       
+;
 }

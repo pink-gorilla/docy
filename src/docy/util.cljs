@@ -17,7 +17,6 @@
     (into [:a {:class class
                :style style
                :on-click goto-link}] body)))
-  
 
 (defn line-with-br [t]
   [:div
@@ -30,5 +29,5 @@
    Needed because \\n is meaningless in html"
   [t]
   (let [lines (str/split t #"\n")]
-    (into [:div ] (map line-with-br lines))))
+    (into [:div] (map line-with-br lines))))
 

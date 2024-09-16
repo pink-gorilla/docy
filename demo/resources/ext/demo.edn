@@ -1,0 +1,8 @@
+{:name "demo-docy"
+ :lazy true
+ :cljs-routes {""  reval.page.viewer/viewer-page
+               ; "devtools/repl" :repl
+               "frepl" demo.page.snippets/snippets-page}
+
+;
+ }

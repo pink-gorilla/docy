@@ -38,7 +38,9 @@
                  {:exts (clip/ref :exts)
                   :clj (clip/ref :clj-service)
                   :role nil
-                  :namespaces (:docy (deref (clip/ref :config)))})}
+                  :namespaces (:namespaces (:docy (deref (clip/ref :config))))
+                  :snippets (:snippets (:docy (deref (clip/ref :config))))
+                  })}
 
 
 

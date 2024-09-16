@@ -1,88 +1,36 @@
 (ns docy.core
   (:require
-   [orchard.info :as orchard]
    [taoensso.timbre :refer [info warn error]]
    [extension :as ext]
-   [clj-service.core :refer [expose-functions]]))
+   [clj-service.core :refer [expose-functions]]
+   [docy.namespace :refer [build-namespaces ns-seq->dict]]
+   [docy.snippet :refer [build-fn-lookup]]))
 
-(defn docstring [symbol]
-  (:doc (meta (resolve symbol))))
+(defn docy-data [{:keys [namespaces snippets]}]
+  (let [ns-seq (build-namespaces namespaces)
+        ns-dict (ns-seq->dict ns-seq)
+        snippet-dict (build-fn-lookup snippets)]
+    {:ns-dict ns-dict
+     :snippet-dict snippet-dict}))
 
-(defn describe-fun [nss fun]
-  (let [data (orchard/info nss fun)]
-    (merge
-     data
-     {:ns (str (:ns data))
-      :name (str (:name data))})))
-    
-
-(defn describe-ns [nss]
-  (require [nss])
-  (let [symbols (keys (ns-publics nss))]
-    {:ns (str nss)
-     :names (->> symbols
-                 (map #(describe-fun nss %))
-                 (filter :doc)
-                 (remove :deprecated ) 
-                 (sort-by :name)
-                 )}))
-
-(defn build-namespaces [ns-symbol-seq]
-  (info "building namespaces: " (count ns-symbol-seq))
-  (let [r (->> (map describe-ns ns-symbol-seq)
-               (sort-by :ns)
-               ;(take 1)
-               (into []))]
-    ;(info "result: " r)
-    r))
-
-(defn start-docy [{:keys [exts clj role namespaces]}]
+(defn start-docy [{:keys [exts clj role namespaces snippets]}]
   (info "starting docy .. ")
   (assert (vector? namespaces))
-  (info "starting docy namespaces: " (count namespaces))
+  (assert (vector? snippets))
+  (info "starting docy namespaces: " (count namespaces)
+        " snippets: " (count snippets))
     ;(add-discovered-namespaces this exts)
   (if clj
     (do
       (info "starting docy clj-services..")
       (expose-functions clj
                         {:name "docy"
-                         :symbols ['docy.core/build-namespaces]
+                         :symbols ['docy.core/docy-data]
                          :permission role
-                         :fixed-args [namespaces]}))
+                         :fixed-args [{:namespaces namespaces
+                                       :snippets snippets}]}))
     (warn "docy starting without clj-services, perhaps you want to pass :clj key"))
   (info "docy running!")
-  namespaces)
+  {:namespaces namespaces
+   :snippets snippets})
 
-(comment
-  (orchard/info 'missionary.core 'amb>)
-  (describe-fun 'missionary.core 'amb>)
-
-  ; deprecated should be removed
-  ; so amb and amb= should exist, but amb> should not
-  (->> (describe-ns 'missionary.core)
-       :names
-       (map :name))
-  
-    (->> (describe-ns 'missionary.core)
-       :names 
-       (filter #(= "amb" (:name %)))  
-       )
-
-
-  (describe-ns 'ta.calendar.core)
-
-  (describe-ns 'ta.indicator.band)
-  
-
-  (require '[modular.system])
-
-  (def d (modular.system/system :docy))
-
-  d
-
-  (build-namespaces d)
-
-  
-  
-  ;
-  )

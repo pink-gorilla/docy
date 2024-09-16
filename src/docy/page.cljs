@@ -4,30 +4,29 @@
    [promesa.core :as p]
    [frontend.notification :refer [show-notification]]
    [goldly.service.core :refer [clj]]
-   [docy.util :refer [link text]]))
+   [docy.util :refer [link text]]
+   [docy.snippet :refer [snippet-list]]))
 
 (def namespaces-dict-a (r/atom {}))
 
-(defn ns-seq->dict [ns-seq]
-  (->> ns-seq
-       (map (fn [{:keys [ns names]}]
-              [ns names]))
-       (into {})))
+(def snippet-dict-a (r/atom {}))
 
 (defn ^:export init-docy!
-  [new-namespaces]
-  (println "init-docy: " new-namespaces)
-  (println "init-docy! ns-count: " (count new-namespaces))
-  (reset! namespaces-dict-a (ns-seq->dict new-namespaces)))
+  [ns-dict snippet-dict]
+  (println "init-docy: " ns-dict)
+  (println "init-docy! ns-count: " (count ns-dict))
+  (println "snippet dict: " snippet-dict)
+  (reset! namespaces-dict-a ns-dict)
+  (reset! snippet-dict-a snippet-dict))
 
 (defn get-data []
-  (let [rp (clj 'docy.core/build-namespaces)]
+  (let [rp (clj 'docy.core/docy-data)]
     (-> rp
-        (p/then (fn [ns-seq]
-                  (init-docy! ns-seq)))
+        (p/then (fn [{:keys [ns-dict snippet-dict]}]
+                  (init-docy! ns-dict snippet-dict)))
         (p/catch (fn [err]
-                   (println "docy fetch ns-seq  error: " err)
-                   (show-notification :error  "docy ns-seq fetch failed!"))))))
+                   (println "docy data fetch error: " err)
+                   (show-notification :error  "docy data fetch failed!"))))))
 
 ; this makes sense because it only needs to be done once.
 (get-data)
@@ -49,22 +48,27 @@
 ; :line 496,
 ; :column 1}
 
-
-(defn fun-ui [{:keys [name doc file line column arglists macro] :as fun}]
-  [:<>
+(defn fun-ui [{:keys [ns name doc file line column arglists macro] :as fun}]
+  (let [fqfn (str ns "/" name)
+        snippets (get @snippet-dict-a fqfn)]
+    (println "fqfn: " fqfn)
+    [:<>
    ; colum left - function  name
-   [:h1.text-xxl.text-blue-800.m-1.p-1
-    name]
+     [:h1.text-xxl.text-blue-800.m-1.p-1
+      name]
    ; column right - arglist and docstring
-   [:div {:class "bg-gray-300 border-solid border-green-300"
-        :style {:max-height "4cm"
-                :overflow "auto"}}
-    (when arglists
-      [:span {:class "text-blue-900 text-bold"}
-       (str arglists)])
-    (when macro
-      [:span {:class "text-red-500 p-1"} "macro"])
-    [text doc]]])
+     [:div {:class "bg-gray-300 border-solid border-green-300"
+            :style {:max-height "4cm"
+                    :overflow "auto"}}
+      (when arglists
+        [:span {:class "text-blue-900 text-bold"}
+         (str arglists)])
+      (when macro
+        [:span {:class "text-red-500 p-1"} "macro"])
+      [text doc]
+      [snippet-list snippets]
+      ;[:span (pr-str snippets)]
+      ]]))
 
 (defn docy-ns-page [{:keys [route-params] :as route}]
   (fn [{:keys [route-params] :as route}]
@@ -84,8 +88,7 @@
    [link {:to ['docy.page/docy-ns-page :nss (str ns-name)]}
     [:span {:style {:width "100px"
                     :min-width "100px"}
-            :class "w-64"
-            }
+            :class "w-64"}
      (str ns-name)]]])
 
 (defn ns-list [ns-symbol-seq]

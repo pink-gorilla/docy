@@ -3,7 +3,8 @@
          ]
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.3"}
-  org.pinkgorilla/goldly-docs {:mvn/version "0.8.34"}
+  ;org.pinkgorilla/goldly-docs {:mvn/version "0.8.34"}
+  org.pinkgorilla/goldly-docs {:mvn/version "0.8.37"}
   io.github.pink-gorilla/docy {:local/root ".." :deps/manifest :deps}
   ; libs we want to document
   scicloj/tablecloth {:mvn/version "7.021"} ; brings techml-dataset
