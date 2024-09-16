@@ -9,3 +9,12 @@
 
 
 
+# demo
+
+
+```
+cd demo
+clj -X:docy
+```
+
+http://localhost:8080/docy
