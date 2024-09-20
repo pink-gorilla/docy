@@ -17,6 +17,8 @@
   (info "starting docy .. ")
   (assert (vector? namespaces))
   (assert (vector? snippets))
+  (ext/write-target-webly :docy-namespaces namespaces)
+  (ext/write-target-webly :docy-sippets snippets)
   (info "starting docy namespaces: " (count namespaces)
         " snippets: " (count snippets))
     ;(add-discovered-namespaces this exts)

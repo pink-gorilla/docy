@@ -4,13 +4,12 @@
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.3"}
   cider/orchard {:mvn/version "0.26.1"}
-  org.pinkgorilla/extension {:mvn/version "0.0.12"}
+  org.pinkgorilla/extension {:mvn/version "0.0.13"}
   org.pinkgorilla/clj-service {:mvn/version "0.3.20"}}
  :aliases
  {; github ci  
   :build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}
-                 slipset/deps-deploy {:mvn/version "0.2.1"}
-                 babashka/fs {:mvn/version "0.0.5"}}
+                 slipset/deps-deploy {:mvn/version "0.2.1"}}
           :ns-default build}}
 ;
  }
