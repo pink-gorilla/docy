@@ -6,7 +6,7 @@
 ;; links
 
 (defn link [{:keys [to class style] :as opts
-             :or {class "bg-blue-600 cursor-pointer hover:bg-red-700 m-1"
+             :or {class "cursor-pointer hover:bg-red-700 m-1"
                   style {}}} & body]
   (let [v (->> (concat [:bidi/goto] to)
                (into []))

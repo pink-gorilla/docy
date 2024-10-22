@@ -105,18 +105,13 @@
 ;; markdown
 
 (defn md-entry [md-name]
-  [:li {:style {:width "100px"
-                :min-width "100px"}}
-   [link {:to ['docy.markdown/docy-markdown-page :md md-name]}
-    [:span {:style {:width "100px"
-                    :min-width "100px"}
-            :class "w-64"}
-     (str md-name)]]])
+  [link {:to ['docy.markdown/docy-markdown-page :query-params {:md md-name}]}
+   [:div.p-1.bg-blue-300.hover:bg-red-300
+    (str md-name)]])
 
 (defn markdown-list [markdown-names]
   (let [markdown-names (sort markdown-names)]
-    (into [:ul {:style {:width "100px"
-                        :min-width "100px"}}]
+    (into [:div.grid.grid-cols-3.w-full]
           (map md-entry markdown-names))))
 
 (defn docy-page [_route]
