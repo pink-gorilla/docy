@@ -20,14 +20,14 @@
                      (reset! md-hiccup-a [:div "erorr: could not load hiccup-md"]))))
       (reset! md-loaded-a md-name)
       nil)
-    [:div
+    [:div.m-5
      [:h1 "docs for: " md-name]
      @md-hiccup-a]))
 
 (defn docy-markdown-page [{:keys [route-params] :as route}]
   (fn [{:keys [query-params] :as route}]
     (let [{:keys [md]} query-params]
-      [:div.bg-green-500.p-5.h-screen.w-screen.prose ; .prose is important
+      [:div.bg-green-500.h-screen.w-screen.prose ; .prose is important
         [:link {:href "/r/docy/prose.css"
                 :rel "stylesheet"
                 :type "text/css"}]
