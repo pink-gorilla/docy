@@ -27,9 +27,8 @@
 (defn docy-markdown-page [{:keys [route-params] :as route}]
   (fn [{:keys [query-params] :as route}]
     (let [{:keys [md]} query-params]
-      [:div.bg-green-500.p-5.w-full.h-full.prose ; .prose is important
+      [:div.bg-green-500.p-5.h-screen.w-screen.prose ; .prose is important
         [:link {:href "/r/docy/prose.css"
                 :rel "stylesheet"
                 :type "text/css"}]
-        [:h1.text-xxl.text-blue-800 "MD: " (str md)]
         [md-ui md]])))
