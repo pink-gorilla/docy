@@ -27,7 +27,9 @@
                {:kb "ctrl-enter" :handler [:repl/eval-expression]               :desc "Evaluate the highlighted segment"}]
 
  :docy {:namespaces [; external 
-                     tablecloth.api]
+                     tablecloth.api
+                     docy.core
+                     ]
         :snippets
         [{:ns "demo.notebook.movies"
           :kernel :clj

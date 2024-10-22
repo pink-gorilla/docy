@@ -11,19 +11,22 @@
 
 (def snippet-dict-a (r/atom {}))
 
+(def markdown-name-a (r/atom []))
+
 (defn ^:export init-docy!
-  [ns-dict snippet-dict]
+  [ns-dict snippet-dict markdown-names]
   (println "init-docy: " ns-dict)
   (println "init-docy! ns-count: " (count ns-dict))
   (println "snippet dict: " snippet-dict)
   (reset! namespaces-dict-a ns-dict)
-  (reset! snippet-dict-a snippet-dict))
+  (reset! snippet-dict-a snippet-dict)
+  (reset! markdown-name-a markdown-names))
 
 (defn get-data []
   (let [rp (clj 'docy.core/docy-data)]
     (-> rp
-        (p/then (fn [{:keys [ns-dict snippet-dict]}]
-                  (init-docy! ns-dict snippet-dict)))
+        (p/then (fn [{:keys [ns-dict snippet-dict md-list]}]
+                  (init-docy! ns-dict snippet-dict md-list)))
         (p/catch (fn [err]
                    (println "docy data fetch error: " err)
                    (show-notification :error  "docy data fetch failed!"))))))
@@ -99,11 +102,31 @@
           (map ns-entry ns-symbol-seq))
     [:div "no docs available!"]))
 
+;; markdown
+
+(defn md-entry [md-name]
+  [:li {:style {:width "100px"
+                :min-width "100px"}}
+   [link {:to ['docy.markdown/docy-markdown-page :md md-name]}
+    [:span {:style {:width "100px"
+                    :min-width "100px"}
+            :class "w-64"}
+     (str md-name)]]])
+
+(defn markdown-list [markdown-names]
+  (let [markdown-names (sort markdown-names)]
+    (into [:ul {:style {:width "100px"
+                        :min-width "100px"}}]
+          (map md-entry markdown-names))))
+
 (defn docy-page [_route]
   (fn [{:keys [route-params] :as route}]
     (let [ns-symbol-seq (keys @namespaces-dict-a)]
       [:div.m-3.h-screen.w-screen
-       [:h1.text-xxl.text-blue-800.p-2 "Docy Documentation "]
+       [:h1.text-xxl.text-blue-800.p-2 "Docy"]
+       [:h2.text-xxl.text-blue-800.p-2 "MarkdownDocs"]
+       [markdown-list @markdown-name-a]
+       [:h2.text-xxl.text-blue-800.p-2 "Namespaces"]
        [ns-list ns-symbol-seq]
        ;[:div (pr-str ns-symbol-seq)]
        ])))

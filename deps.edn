@@ -4,7 +4,8 @@
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.3"}
   cider/orchard {:mvn/version "0.26.1"}
-  org.pinkgorilla/extension {:mvn/version "0.0.13"}
+  commonmark-hiccup/commonmark-hiccup {:mvn/version "0.3.0"} ; markdown to hiccup
+  org.pinkgorilla/extension {:mvn/version "0.0.14"}
   org.pinkgorilla/clj-service {:mvn/version "0.3.20"}}
  :aliases
  {; github ci  
