@@ -6,6 +6,7 @@
   cider/orchard {:mvn/version "0.26.1"}
   commonmark-hiccup/commonmark-hiccup {:mvn/version "0.3.0"} ; markdown to hiccup
   org.pinkgorilla/extension {:mvn/version "0.0.14"}
+  org.pinkgorilla/modular {:mvn/version "0.2.67"}
   org.pinkgorilla/clj-service {:mvn/version "0.3.20"}}
  :aliases
  {; github ci  

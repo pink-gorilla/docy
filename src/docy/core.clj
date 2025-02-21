@@ -3,6 +3,7 @@
    [taoensso.timbre :refer [info warn error]]
    [commonmark-hiccup.core :refer [markdown->hiccup]]
    [extension :as ext]
+   [modular.writer :refer [write-edn-private]]
    [clj-service.core :refer [expose-functions]]
    [docy.namespace :refer [build-namespaces ns-seq->dict]]
    [docy.snippet :refer [build-fn-lookup]]
@@ -40,8 +41,8 @@
   (info "starting docy .. ")
   (assert (vector? namespaces))
   (assert (vector? snippets))
-  (ext/write-target-webly :docy-namespaces namespaces)
-  (ext/write-target-webly :docy-sippets snippets)
+  (write-edn-private :docy-namespaces namespaces)
+  (write-edn-private :docy-sippets snippets)
   (let [md-dict (md/get-markdown-dict)
         state  {:namespaces namespaces
                 :snippets snippets

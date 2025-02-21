@@ -1,6 +1,5 @@
 (ns docy.markdown
   (:require
-   [clojure.edn :as edn]
    [resauce.core :as rs]
    [modular.resource.classpath :refer [url-name]]))
 
