@@ -1,4 +1,4 @@
-{:reval {:rdocument  {:storage-root "target/webly/public/rdocument/"
+{:reval {:rdocument  {:storage-root ".gorilla/public/rdocument/"
                       :url-root "/api/rdocument/file/"}
          :collections {:study [:clj "quanta/notebook/study/"]
                        :quanta-docs [:clj "quanta/notebook/docs/"]}}

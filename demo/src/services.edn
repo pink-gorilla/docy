@@ -1,11 +1,12 @@
  {:modular (modular.system/modular-env)  ; {:profile "jetty"  :config ["demo.edn" "secrets.edn"]}
  :components
- {:config {:start (modular.config/load-config! (:config #ref [:modular]))}
-  
+ {:config1 {:start (modular.config/load-config! (:config #ref [:modular]))}
+  :config {:start (deref (clip/ref :config1))}
+
   :exts {:start (extension/discover)}
 
   :timbre {:start (modular.log/timbre-config!
-                   (:timbre/clj (deref (clip/ref :config))))}
+                   (:timbre/clj (clip/ref :config)))}
 
   ; empty map means no users are configured, so always permissioned.
   :permission {:start (modular.permission.core/start-permissions {})}
@@ -15,15 +16,15 @@
                         (clip/ref :exts))}
 
   :reval {:start (reval.core/start-reval
-                  {:config (:reval (deref (clip/ref :config)))
+                  {:config (:reval (clip/ref :config))
                    :clj  (clip/ref :clj-service)
                    :reval-role nil})}
 
-  :webly {:start (webly.app.app/start-webly
-                  (clip/ref :exts)
-                  (deref (clip/ref :config))
+  :webly {:start (webly.spa/start-webly
+                  {:exts (clip/ref :exts)}
+                  (clip/ref :config)
                   (:profile #ref [:modular]))
-          :stop (webly.app.app/stop-webly this)}
+          :stop (webly.spa/stop-webly this)}
 
   :nrepl {:start (nrepl.server/start-server
                   :bind "0.0.0.0"
@@ -38,8 +39,8 @@
                  {:exts (clip/ref :exts)
                   :clj (clip/ref :clj-service)
                   :role nil
-                  :namespaces (:namespaces (:docy (deref (clip/ref :config))))
-                  :snippets (:snippets (:docy (deref (clip/ref :config))))
+                  :namespaces (:namespaces (:docy (clip/ref :config)))
+                  :snippets (:snippets (:docy (clip/ref :config)))
                   })}
 
 

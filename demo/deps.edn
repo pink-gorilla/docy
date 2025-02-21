@@ -3,15 +3,22 @@
          ]
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.3"}
-  org.pinkgorilla/goldly-docs {:mvn/version "0.9.49"}
+  org.pinkgorilla/webly {:mvn/version "0.9.717"} ; build tool
+  org.pinkgorilla/goldly {:mvn/version "0.9.685"}
+  org.pinkgorilla/reval {:mvn/version "0.10.178"} ; for snippet viewer
   io.github.pink-gorilla/docy {:local/root ".." :deps/manifest :deps}
   ; libs we want to document
   scicloj/tablecloth {:mvn/version "7.029.2"} ; brings techml-dataset
   }
  :aliases
- {:docy {; usecase: clj -X:docy
+ {:npm-install
+  {:exec-fn webly.spa/webly-build
+   :config {}
+   :exec-args {:profile "npm-install"}}
+  
+  :docy {; usecase: clj -X:docy
          :exec-fn modular.system/start!
-         :exec-args {:profile "jetty"
+         :exec-args {:profile "watch"
                      :config ["config.edn"]
                      :services "services.edn"}}
 

@@ -1,9 +1,9 @@
 (ns docy.core
   (:require
    [taoensso.timbre :refer [info warn error]]
+   [commonmark-hiccup.core :refer [markdown->hiccup]]
    [extension :as ext]
    [clj-service.core :refer [expose-functions]]
-   [commonmark-hiccup.core :refer [markdown->hiccup]]
    [docy.namespace :refer [build-namespaces ns-seq->dict]]
    [docy.snippet :refer [build-fn-lookup]]
    [docy.markdown :as md]))

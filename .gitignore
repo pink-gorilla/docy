@@ -34,3 +34,4 @@ package-lock.json
 shadow-cljs.edn
 goldly_bindings_generated.cljs
 resources/META-INF
+.gorilla
