@@ -1,12 +1,15 @@
 (ns docy.core
   (:require
    [taoensso.timbre :refer [info warn error]]
-   [commonmark-hiccup.core :refer [markdown->hiccup]]
+   [commonmark-hiccup.core :as cmh]
    [extension :as ext]
    [modular.writer :refer [write-edn-private]]
    [docy.namespace :refer [build-namespaces ns-seq->dict]]
    [docy.snippet :refer [build-fn-lookup]]
-   [docy.markdown :as md]))
+   [docy.markdown :as md])
+  (:import
+   [org.commonmark.ext.gfm.tables TableBlock TableHead TableBody TableRow TableCell]
+   [org.commonmark.ext.gfm.tables TablesExtension]))
 
 (defn docy-data [{:keys [data-a md-dict-a]}]
   (assoc @data-a :md-list (keys @md-dict-a))
@@ -23,11 +26,22 @@
   (let [data (calculate-namespaces state)]
     (swap! data-a merge data)))
 
+(def ^:private markdown-config
+  "Config for commonmark-hiccup with GFM tables support."
+  (-> cmh/default-config
+      (update-in [:parser :extensions] conj (TablesExtension/create))
+      (update-in [:renderer :nodes] merge
+                 {TableBlock  [:table :content]
+                  TableHead   [:thead :content]
+                  TableBody   [:tbody :content]
+                  TableRow    [:tr :content]
+                  TableCell   [:td :content]})))
+
 (defn markdown-doc [{:keys [md-dict-a]} markdown-name]
   (let [md-entry (get @md-dict-a markdown-name)]
     (cond
       md-entry
-      (markdown->hiccup (md/slurp-markdown @md-dict-a markdown-name))
+      (cmh/markdown->hiccup markdown-config (md/slurp-markdown @md-dict-a markdown-name))
       :else
       [:div [:p "md not found: " markdown-name]])))
 

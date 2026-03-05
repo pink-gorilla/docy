@@ -28,13 +28,16 @@
   (println "docy-markdown-page: " route)
   (fn [{:keys [path-params]}]
     (let [{:keys [md]} path-params]
-      [:div {:style {:background "#dcfce7"
+      [:<>
+       [:link {:href "/r/docy/prose.css"
+               :rel "stylesheet"
+               :type "text/css"}]
+       [:div {:style {:background "#dcfce7"
                      :width "100%"
                      :height "100%"
                      :overflow "auto"
                      :boxSizing "border-box"}
              :class "prose"}
-       [:link {:href "/r/docy/prose.css"
-               :rel "stylesheet"
-               :type "text/css"}]
-       [md-ui md]])))
+       [md-ui md]] 
+       ]
+      )))

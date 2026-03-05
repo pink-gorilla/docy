@@ -1,10 +1,9 @@
-{:paths ["src"
-         "resources" ; extension data
-         ]
+{:paths ["src" "resources"]
  :deps
  {org.clojure/clojure    {:mvn/version "1.11.3"}
   cider/orchard {:mvn/version "0.26.1"}
   commonmark-hiccup/commonmark-hiccup {:mvn/version "0.3.0"} ; markdown to hiccup
+  org.commonmark/commonmark-ext-gfm-tables {:mvn/version "0.21.0"} ; GFM tables for markdown
   org.pinkgorilla/extension {:mvn/version "0.0.14"}
   org.pinkgorilla/modular {:mvn/version "0.2.67"}
   org.pinkgorilla/clj-service {:mvn/version "0.7.4"}}

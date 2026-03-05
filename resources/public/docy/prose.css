@@ -6,92 +6,117 @@
 */
 
 .prose {
-    font-family:    Segoe UI, Roboto, sans-serif;
-    font-size:      14px;
-    font-weight:    400;
-    color:          rgba(68, 68, 68, 1.0);
-    letter-spacing: 0.002em;
-    /* height:         100%;*/
-    margin:         0px;
-    padding:        0px;
-  }
-  
-  .prose h1 {
-    color: blue;
-    font-weight: 200; /* normal; */
-    font-size: 24px;
-    margin-top: 0.25em;
-  }
-  .prose h2 {font-size: 20px;}
-  .prose h3 {font-size: 18px;}
-  .prose h4 {font-size: 16px;}
-  
-  
-  .prose a {
-      color: black; 
-      textDecoration: 'underline';
-    }
-  
-   .prose strong {
-      color: black;
-      font-weight: '600';
-    }
-  
-    .prose ol {
-      counter-reset: list-counter
-    }
-  
-    .prose ol > li {
-      position: 'relative';
-      counter-increment: list-counter;
-    }
-  
-    .prose ol > li::before {
-      content: counter(list-counter) ". ";
-      position: 'absolute';
-      font-weight: '400';
-      color: black;
-    }
-  
-  .prose ul > li {
-      position: 'relative';
-      list-style-position: inside;
-      list-style-type : circle;
-      list-style-image: none;
-      /* color: red; */
-      margin: 0px;
-      padding: 0px;
-    }
-  
-  .prose ul > li::before {
-      content: "";
-      position: 'absolute';
-      background-color: black;
-      border-radius: '50%';
-    }
-  
-   .prose hr {
-      border-color:black;
-      border-top-width: 1;
-    }
-  
-    .prose blockquote {
-      font-weight: '500';
-      font-style: 'italic';
-      color: black;
-      border-left-width: '0.25rem';
-      border-left-color: black;
-      quotes: '"\\201C""\\201D""\\2018""\\2019"';
-    }
-  
-    .prose blockquote p:first-of-type::before {
-      content: 'open-quote';
-    }
-    
-    .prose blockquote p:last-of-type::after {
-      content: 'close-quote';
-    }
-  
-    .prose code {
-      background-color: lightblue;
-    }
+  font-family: Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(68, 68, 68, 1.0);
+  letter-spacing: 0.002em;
+  /* height:         100%;*/
+  margin: 0px;
+  padding: 0px;
+}
+
+.prose h1 {
+  color: blue;
+  font-weight: 200;
+  /* normal; */
+  font-size: 24px;
+  margin-top: 0.25em;
+}
+
+.prose h2 {
+  font-size: 20px;
+}
+
+.prose h3 {
+  font-size: 18px;
+}
+
+.prose h4 {
+  font-size: 16px;
+}
+
+
+.prose a {
+  color: black;
+  textDecoration: 'underline';
+}
+
+.prose strong {
+  color: black;
+  font-weight: '600';
+}
+
+.prose ol {
+  counter-reset: list-counter
+}
+
+.prose ol>li {
+  position: 'relative';
+  counter-increment: list-counter;
+}
+
+.prose ol>li::before {
+  content: counter(list-counter) ". ";
+  position: 'absolute';
+  font-weight: '400';
+  color: black;
+}
+
+.prose ul>li {
+  position: 'relative';
+  list-style-position: inside;
+  list-style-type: circle;
+  list-style-image: none;
+  /* color: red; */
+  margin: 0px;
+  padding: 0px;
+}
+
+.prose ul>li::before {
+  content: "";
+  position: 'absolute';
+  background-color: black;
+  border-radius: '50%';
+}
+
+.prose hr {
+  border-color: black;
+  border-top-width: 1;
+}
+
+.prose blockquote {
+  font-weight: '500';
+  font-style: 'italic';
+  color: black;
+  border-left-width: '0.25rem';
+  border-left-color: black;
+  quotes: '"\\201C""\\201D""\\2018""\\2019"';
+}
+
+.prose blockquote p:first-of-type::before {
+  content: 'open-quote';
+}
+
+.prose blockquote p:last-of-type::after {
+  content: 'close-quote';
+}
+
+
+
+/* Prose code: continuous background, same width for all lines, fixed-width font */
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background-color: lightblue;
+  padding: 0.25em 0.4em;
+  box-decoration-break: clone;
+}
+
+/* Code blocks: full-width block so no gaps and all lines same width */
+.prose pre code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  display: block;
+  width: 100%;
+  padding: 0.4em 0.5em;
+  line-height: 1.5;
+}
