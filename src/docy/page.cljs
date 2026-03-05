@@ -3,9 +3,10 @@
    [reagent.core :as r]
    [promesa.core :as p]
    [frontend.notification :refer [show-notification]]
-   [goldly.service.core :refer [clj]]
+   [clj-service.http :refer [clj]]
    [docy.util :refer [link text]]
    [docy.snippet :refer [snippet-list]]))
+
 
 (def namespaces-dict-a (r/atom {}))
 
@@ -34,9 +35,9 @@
 ; this makes sense because it only needs to be done once.
 (get-data)
 
-(defn docy-fun-page [{:keys [route-params] :as route}]
-  (fn [{:keys [route-params] :as route}]
-    (let [{:keys [nss fun]} route-params
+(defn docy-fun-page [{:keys [path-params] :as route}]
+  (fn [{:keys [path-params] :as route}]
+    (let [{:keys [nss fun]} path-params
           data (get @namespaces-dict-a nss)]
       [:div
        [:h1.text-xxl.text-blue-800 "Namespace: " (str nss) " Function: " (str fun)]
@@ -105,7 +106,9 @@
 ;; markdown
 
 (defn md-entry [md-name]
-  [link {:to ['docy.markdown/docy-markdown-page :query-params {:md md-name}]}
+  [link {:to {:page :docy-md 
+              :opts {:path-params {:md md-name}}
+              }}
    [:div.p-1.bg-blue-300.hover:bg-red-300
     (str md-name)]])
 

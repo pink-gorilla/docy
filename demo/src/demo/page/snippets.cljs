@@ -1,6 +1,6 @@
 (ns demo.page.snippets
   (:require
-   [reval.frepl :refer [show-floating-repl show-floating-repl-namespace]]
+   ;[reval.frepl :refer [show-floating-repl show-floating-repl-namespace]]
    [docy.snippet :refer [snippet-list]]))
 
 
@@ -13,7 +13,7 @@
     :label "range"}])
 
 
-(defn snippets-page [{:keys [route-params query-params handler] :as route}]
+#_(defn snippets-page [{:keys [route-params query-params handler] :as route}]
   [:div
    [:h1 "I am a normal reagent page. But I can add a floating repl."]
 

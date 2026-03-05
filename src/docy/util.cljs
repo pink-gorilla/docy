@@ -1,19 +1,22 @@
 (ns docy.util
   (:require
    [clojure.string :as str]
-   [re-frame.core :as rf]))
+   [reitit.frontend.easy :as rfe]))
 
 ;; links
+
+(defn goto [{:keys [page opts] :as to}]
+  (println "going to: " to)
+  (if opts 
+    (rfe/navigate page opts)  
+    (rfe/navigate page)))
+
 
 (defn link [{:keys [to class style] :as opts
              :or {class "cursor-pointer hover:bg-red-700 m-1"
                   style {}}} & body]
-  (let [v (->> (concat [:bidi/goto] to)
-               (into []))
-        goto-link (fn [& _]
-                    (println "going to: " v)
-                    (rf/dispatch v))]
-    (println "link: " v)
+  (let [goto-link (fn [& _]
+                    (goto to))]
     (into [:a {:class class
                :style style
                :on-click goto-link}] body)))

@@ -4,13 +4,13 @@
    [commonmark-hiccup.core :refer [markdown->hiccup]]
    [extension :as ext]
    [modular.writer :refer [write-edn-private]]
-   [clj-service.core :refer [expose-functions]]
    [docy.namespace :refer [build-namespaces ns-seq->dict]]
    [docy.snippet :refer [build-fn-lookup]]
    [docy.markdown :as md]))
 
-(defn docy-data [{:keys [data-a]}]
-  @data-a)
+(defn docy-data [{:keys [data-a md-dict-a]}]
+  (assoc @data-a :md-list (keys @md-dict-a))
+  )
 
 (defn calculate-namespaces [{:keys [namespaces snippets]}]
   (let [ns-seq (build-namespaces namespaces)
@@ -23,49 +23,39 @@
   (let [data (calculate-namespaces state)]
     (swap! data-a merge data)))
 
-(defn markdown-doc [{:keys [md-dict]} markdown-name]
-  (let [md-entry (get md-dict markdown-name)]
+(defn markdown-doc [{:keys [md-dict-a]} markdown-name]
+  (let [md-entry (get @md-dict-a markdown-name)]
     (cond
       md-entry
-      (markdown->hiccup (md/slurp-markdown md-dict markdown-name))
+      (markdown->hiccup (md/slurp-markdown @md-dict-a markdown-name))
       :else
       [:div [:p "md not found: " markdown-name]])))
 
 (defn start-docy
   "start docy service. 
    :namespaces a vector of namespaces (in symbolic form) to document
-   :snippets a vector of snippets that are linked to namespace docs
-   :clj clj-service-exposing module
-   :role the user-role (if any) required to access the clj-service"
-  [{:keys [exts clj role namespaces snippets]}]
+   :snippets a vector of snippets that are linked to namespace docs"
+  [{:keys [exts namespaces snippets]
+    :or {namespaces []
+         snippets []}}]
   (info "starting docy .. ")
   (assert (vector? namespaces))
   (assert (vector? snippets))
   (write-edn-private :docy-namespaces namespaces)
-  (write-edn-private :docy-sippets snippets)
+  (write-edn-private :docy-snippets snippets)
   (let [md-dict (md/get-markdown-dict)
+        _ (write-edn-private :docy-markdown md-dict)
         state  {:namespaces namespaces
                 :snippets snippets
-                :md-dict md-dict
+                :md-dict-a (atom md-dict)
                 :data-a (atom {:ns-dict {}
-                               :snippet-dict {}
-                               :md-list (keys md-dict)})}]
+                               :snippet-dict {}})}]
     (info "starting docy namespaces: " (count namespaces)
           " snippets: " (count snippets) " markdown: " (count (keys md-dict)))
     ;(add-discovered-namespaces this exts)
     (future
       (build! state)
-      (info "docy ns build finished!"))
-    (if clj
-      (do
-        (info "starting docy clj-services..")
-        (expose-functions clj
-                          {:name "docy"
-                           :symbols ['docy.core/docy-data
-                                     'docy.core/markdown-doc]
-                           :permission role
-                           :fixed-args [state]}))
-      (warn "docy starting without clj-services, perhaps you want to pass :clj key"))
+      (info "docy ns build finished!")) 
     (info "docy running!")
     state))
 

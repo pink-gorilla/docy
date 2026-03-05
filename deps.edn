@@ -7,7 +7,7 @@
   commonmark-hiccup/commonmark-hiccup {:mvn/version "0.3.0"} ; markdown to hiccup
   org.pinkgorilla/extension {:mvn/version "0.0.14"}
   org.pinkgorilla/modular {:mvn/version "0.2.67"}
-  org.pinkgorilla/clj-service {:mvn/version "0.3.20"}}
+  org.pinkgorilla/clj-service {:mvn/version "0.7.4"}}
  :aliases
  {; github ci  
   :build {:deps {io.github.clojure/tools.build {:mvn/version "0.9.6"}

@@ -2,13 +2,13 @@
   (:require
    [promesa.core :as p]
    [reagent.core :as r]
-   [goldly.service.core :refer [clj]]))
+   [clj-service.http :refer [clj]]))
 
 (def md-loaded-a (r/atom nil))
 
 (def md-hiccup-a (r/atom [:div "loading.."]))
 
-(defn md-ui [md-name]
+(defn md-ui [_md-name]
   (fn [md-name]
     (when (not (= md-name @md-loaded-a))
       (println "loading md for md-name: " md-name)
@@ -17,18 +17,24 @@
                     (println "help-hiccup loaded: " hiccup)
                     (reset! md-hiccup-a hiccup)))
           (p/catch (fn [err]
-                     (reset! md-hiccup-a [:div "erorr: could not load hiccup-md"]))))
+                     (reset! md-hiccup-a [:div "error: could not load hiccup-md"]))))
       (reset! md-loaded-a md-name)
       nil)
-    [:div.m-5
-     [:h1 "docs for: " md-name]
+    [:div {:style {:margin "1.25rem"}}
+     ;[:h1 "docs for: " md-name]
      @md-hiccup-a]))
 
-(defn docy-markdown-page [{:keys [route-params] :as route}]
-  (fn [{:keys [query-params] :as route}]
-    (let [{:keys [md]} query-params]
-      [:div.bg-green-500.h-screen.w-screen.prose ; .prose is important
-        [:link {:href "/r/docy/prose.css"
-                :rel "stylesheet"
-                :type "text/css"}]
-        [md-ui md]])))
+(defn docy-markdown-page [{:keys [_path-params] :as route}]
+  (println "docy-markdown-page: " route)
+  (fn [{:keys [path-params]}]
+    (let [{:keys [md]} path-params]
+      [:div {:style {:background "#dcfce7"
+                     :width "100%"
+                     :height "100%"
+                     :overflow "auto"
+                     :boxSizing "border-box"}
+             :class "prose"}
+       [:link {:href "/r/docy/prose.css"
+               :rel "stylesheet"
+               :type "text/css"}]
+       [md-ui md]])))

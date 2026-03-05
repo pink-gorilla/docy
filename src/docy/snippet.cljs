@@ -1,9 +1,10 @@
 (ns docy.snippet
   (:require
-   [reval.frepl :refer [show-floating-repl show-floating-repl-namespace]]))
+   ;[reval.frepl :refer [show-floating-repl show-floating-repl-namespace]]
+   ))
 
 (defn snippet-item [{:keys [ns kernel label]}]
-  [:a {:on-click #(show-floating-repl-namespace {:ns ns
+  [:a #_{:on-click #(show-floating-repl-namespace {:ns ns
                                                  :kernel kernel})}
    [:span.pr-1.text-blue-500 label]])
 
